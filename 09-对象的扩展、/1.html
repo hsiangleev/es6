@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		// 1. 属性的简洁表示法
+			// ES6 允许直接写入变量和函数，作为对象的属性和方法
+			// {
+			// 	let a="aaa";
+			// 	let obj={a};
+			// 	console.log(obj)		//{a: "aaa"}
+			// }
+			// {
+			// 	let f=(a,b)=>({a,b});
+			// 	console.log(f(1,2))		//{a: 1, b: 2}
+			// }
+			// {
+			// 	let obj={
+			// 		add() {
+			// 			console.log(666);
+			// 		}
+			// 	}
+			// 	obj.add();
+			// }
+			// // 综合示例
+			// {
+			// 	let a="aaa";
+			// 	let obj={
+			// 		a,
+			// 		add() {
+			// 			return this.a+"bbb";
+			// 		}
+			// 	}
+			// 	console.log(obj.add());
+			// }
+			// // 用于函数的返回值，将会非常方便
+			// {
+			// 	let f=()=>{
+			// 		let a="aaa";
+			// 		let b="bbb";
+			// 		return {a,b};
+			// 	}
+			// 	console.log(f());
+			// }
+		// 2. 属性名表达式
+			// ES6 允许字面量定义对象时，用表达式作为对象的属性名，即把表达式放在方括号内。
+			// {
+			// 	let a="foo";
+			// 	let obj={
+			// 		[a]: "FOO",
+			// 		[a+"-bar"]: "BAR",
+
+			// 		[a+"nihao"]() {
+			// 			return "倪好";
+			// 		}
+			// 	}
+			// 	console.log(obj)
+			// }
+		// 3. 方法的 name 属性
+
+		// 4. Object.is()
+			// 用来比较两个值是否严格相等，与严格比较运算符（===）的行为基本一致。
+			// {
+			// 	console.log(Object.is(-0,+0));		// false
+			// 	console.log(Object.is(NaN,NaN));	// true
+			// }
+		// 5. Object.assign()
+			// 用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）。
+			// Object.assign(target, source1, source2);
+			// {
+			// 	let obj1={a: "aaa"};
+			// 	let obj2={b: "bbb"};
+			// 	let obj3={c: "ccc"};
+			// 	Object.assign(obj1,obj2,obj3);
+			// 	console.log(obj1);		// {a: "aaa", b: "bbb", c: "ccc"}
+			// }
+			// 如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。
+			// {
+			// 	let obj1={a: "aaa"};
+			// 	let obj2={b: "bbb"};
+			// 	let obj3={a: "ccc"};
+			// 	Object.assign(obj1,obj2,obj3);
+			// 	console.log(obj1);		// {a: "ccc", b: "bbb"}
+			// }
+
+			// -----------------------------------------------------------
+			// 5.1 浅拷贝(如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用。)
+				// {
+				// 	let obj1={a: {b: "ccc"}};
+				// 	let obj2=Object.assign({},obj1);
+				// 	obj1.a.b="ddd";		// 指向同一地址(修改其中一个会都改变)
+				// 	console.log(obj2);
+				// }
+			// 5.2 数组的处理(用来处理数组，但是会把数组视为对象。)
+				// {
+				// 	console.log(Object.assign([1, 2, 3], [4, 5]))
+				// 	// [4, 5, 3]
+				// }
+
+
+			// 用途-------------------------------------------------
+			// 1. 为对象添加属性
+				// {
+				// 	let obj={
+				// 		add(x,y) {
+				// 			Object.assign(this,{x,y});
+				// 		}
+				// 	}
+				// 	obj.add(2,3);
+				// 	console.log(obj);
+				// }
+			// 2. 为对象添加方法
+				// {
+				// 	function f(){
+						
+				// 	}
+				// 	Object.assign(f.prototype,{
+				// 		add(x,y) {
+				// 			return x+y;
+				// 		},
+				// 		sub(x,y) {
+				// 			return x-y;
+				// 		}
+				// 	});
+				// 	let a=new f();
+				// 	console.log(a)
+				// }
+			// 3. 为属性指定默认值
+				// {
+				// 	const DEFAULTS={
+				// 		leave: 0,
+				// 		name: "lee"
+				// 	}
+				// 	function Fn(options){
+				// 		options=Object.assign({},DEFAULTS,options);
+				// 		console.log(options);
+				// 	}
+				// 	Fn({
+				// 		a: "aaa",
+				// 		b: "bbb"
+				// 	})
+				// }
+
+		// 6. 属性的可枚举性和遍历
+			// {
+			// 	let obj={
+			// 		a: "aaa"
+			// 	}
+			// 	console.log(Object.getOwnPropertyDescriptor(obj,"a"))
+			// }
+
+			// 属性的遍历---------------------------------------------
+			// 1. for...in
+				// for...in循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。
+				// {
+				// 	let obj={
+				// 		a: "aaa"
+				// 	}
+				// 	Object.getPrototypeOf(obj).b="bbb";
+				// 	let arr=[];
+				// 	for(let k in obj){
+				// 		arr.push(k)
+				// 	}
+				// 	console.log(arr)
+				// }
+			// 2. Object.keys(obj)
+				// Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。
+				// {
+				// 	let obj={
+				// 		a: "aaa"
+				// 	}
+				// 	obj.__proto__.b="bbb";
+				// 	console.log(Object.keys(obj))
+				// }
+			// 3. Object.getOwnPropertyNames(obj)
+				// 返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。
+				// {
+				// 	let obj=Object.create({},{
+				// 		a: {
+				// 			value: "aaa",
+				// 			writable: true,
+				// 			enumberable: false,
+				// 			configurable: true
+				// 		}
+				// 	})
+				// 	obj.b="bbb";
+				// 	console.log(Object.keys(obj))
+				// 	console.log(Object.getOwnPropertyNames(obj));
+				// }
+			// 4. Object.getOwnPropertySymbols(obj)
+				// 返回一个数组，包含对象自身的所有 Symbol 属性的键名。
+				// {
+				// 	let a=Symbol("aaa");
+				// 	let b=Symbol("bbb");
+				// 	let obj={
+				// 		[a]: "aaa",
+				// 		[b]: "bbb",
+				// 		c: "ccc"
+				// 	}
+				// 	console.log(obj)
+				// 	console.log(Object.getOwnPropertySymbols(obj))
+				// }
+			// 5. Reflect.ownKeys(obj)
+				// 返回一个数组，包含对象自身的所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。
+		
+		// 7. Object.getOwnPropertyDescriptors()
+			// 返回指定对象所有自身属性（非继承属性）的描述对象。
+
+		// 8. Object.setPrototypeOf()
+			// {
+			// 	let obj1={
+			// 		a: "aaa",
+			// 		b: "bbb"
+			// 	}
+			// 	let obj2={
+			// 		c: "ccc",
+			// 		d: "ddd"
+			// 	}
+			// 	Object.setPrototypeOf(obj1,obj2);	// obj1继承obj2
+			// 	console.log(obj1)
+			// }
+		// 9. Object.getPrototypeOf() 
+			// {
+			// 	let obj1={
+			// 		a: "aaa",
+			// 		b: "bbb"
+			// 	}
+			// 	let obj2={
+			// 		c: "ccc",
+			// 		d: "ddd"
+			// 	}
+			// 	Object.setPrototypeOf(obj1,obj2);	// obj1继承obj2
+			// 	console.log(Object.getPrototypeOf(obj1))
+			// }
+
+		// 10. super 关键字 (指向当前对象的原型对象。)
+			// {
+			// 	let obj1={
+			// 		a: "aaa"
+			// 	}
+			// 	let obj2={
+			// 		getA() {
+			// 			return super.a;
+			// 		}
+			// 	}
+			// 	Object.setPrototypeOf(obj2,obj1);
+			// 	console.log(obj2.getA(obj1))
+			// }
+			// // 相当于
+			// {
+			// 	let obj1={
+			// 		a: "aaa"
+			// 	}
+			// 	let obj2={
+			// 		getA() {
+			// 			return this.a;
+			// 		}
+			// 	}
+			// 	Object.setPrototypeOf(obj2,obj1);
+			// 	console.log(obj2.getA.call(obj1))
+			// }
+
+		// 12. 对象的扩展运算符
+			// {
+			// 	let {x,y, ...a}={
+			// 		x: "xxx",
+			// 		y: "yyy",
+			// 		c: "ccc",
+			// 		d: "ddd",
+			// 		e: "eee"
+			// 	}
+			// 	console.log(x)
+			// 	console.log(y)
+			// 	console.log(a)
+			// }
+			// 用途
+			// 合并对象
+			{
+				let obj1={
+					a: "aaa"
+				}
+				let obj2={
+					b: "bbb"
+				}
+				let obj={...obj1, ...obj2};
+				console.log(obj)
+			}
+	</script>
+</body>
+</html>

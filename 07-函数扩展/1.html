@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script>
+		// 1. 函数参数的默认值
+			// a.基本用法
+			// {
+			// 	let f=function (x,y=2){
+			// 		return x+y;
+			// 	}
+			// 	console.log(f(1));
+			// 	console.log(f(1,5));
+			// }
+
+			// b. 参数变量是默认声明的，所以不能用let或const再次声明。
+			// {
+			// 	let f=function (x,y=2){
+			// 		// let y=3;	//报错
+			// 		return x+y;
+			// 	}
+			// 	console.log(f(1));
+			// }
+
+			// c. 使用参数默认值时，函数不能有同名参数。
+			// {
+			// 	function (x,x,y=2){
+					
+			// 	}
+			// }
+			
+	// 2.rest 参数
+		// 2.1 ES6 引入 rest 参数（形式为...变量名），用于获取函数的多余参数，这样就不需要使用arguments对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+			{
+				// let f=function (...value){
+				// 	return value.sort(function (a,b){
+				// 		return Math.random()>0.5;	//打乱参数顺序
+				// 	});
+				// }
+				// console.log(f(1,2,8,3,5,6));
+			}
+
+	// 4. name属性(函数的name属性，返回该函数的函数名。)
+			{
+				// function foo(){}
+				// console.log(foo.name)  //foo
+			}
+			{
+				// let f=function (){}
+				// console.log(f.name)		// es5: ""     es6: f
+			}
+			{
+				// let f=function foo(){}
+				// console.log(f.name)		//foo
+			}
+
+	// 5. new.target
+			// 如果通过new调用，new.target将指向当前正在执行的函数，其他情况都指向undefined。
+			{
+
+			}
+
+
+
+	// 6. 箭头函数
+			{
+				// let f=function (a,b){
+				// 	return a+b;
+				// }
+				// console.log(f(2,3))
+			}
+			// 等同于
+			{
+				// let f=(a,b)=>a+b;
+				// console.log(f(3,6))
+			}
+
+			{
+				// let f=(a,b)=>{
+				// 	let c=9;
+				// 	return a+b+c;
+				// }
+				// console.log(f(3,5))
+			}
+
+		// 简化回调函数
+			{
+				// let a=[1,2,3].map((val,index)=>val*3);
+				// console.log(a)
+			}
+			{
+				let a=[2,6,3,5].sort((a,b)=>a-b);
+				console.log(a)
+			}
+
+		// （1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+		// （2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+		// （3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
+		// （4）不可以使用yield命令，因此箭头函数不能用作 Generator 函数。
+			{
+				// let obj={
+				// 	id: 3,
+				// 	add: function (){
+				// 		setTimeout(()=>{
+				// 			console.log(this.id);
+				// 		},1000);
+				// 	}
+				// }
+				// obj.add();
+			}
+
+
+			{
+				function a(){
+					this.name="aaa";
+				}
+				function b(){
+					this.age=18;
+				}
+				b.prototype=new a();
+				var k=new b();
+				console.log(k)
+			}
+	</script>
+</body>
+</html>
